@@ -249,7 +249,7 @@ namespace SPFS.Controllers
                 SelectSiteGDIS gdis = selectGDIS.Where(g => g.SiteID.Equals(ratingModel.SiteID)).FirstOrDefault();
 
                 UpdatedModel.SiteName = gdis.Name;
-                var rateSuppliers = ratingModel.RatingRecords.Select(r => new SelectListItem { Text = r.SupplierName + " CID:" + r.CID, Value = r.CID.ToString() }).ToList();
+                var rateSuppliers = UpdatedModel.RatingRecords.Select(r => new SelectListItem { Text = r.SupplierName + " CID:" + r.CID, Value = r.CID.ToString() }).ToList();
                 LoadDropdowns(rateSuppliers);
             }
 
@@ -617,18 +617,47 @@ namespace SPFS.Controllers
         [MultipleSubmitAttribute(Name = "action", Argument = "SaveData")]
         public ActionResult SaveData(RatingsViewModel ratingModel)
         {
+            int i = 0;
+            foreach (var item in ratingModel.RatingRecords)
+            {
+                if(item.Inbound_parts <=0)
+                {
+                    ModelState.AddModelError("RatingRecords["+i+"].Inbound_parts", "Inbound parts is greater than 0");
+
+
+                }
+
+                i++;
+            }
             if (true)
             {
+
 
                 ModelState.AddModelError("", "error occured");
             }
 
             if (ModelState.IsValid)
             {
+                var finalList = ratingModel.RatingRecords.Take(10);
+                using (Repository rep = new Repository())
+                {
+                    var existingResult = new List<int>();
+
+                    foreach (var item in existingResult)
+                    {
+                        //if(true)
+                        //{
+                        //    item.Inbound_parts = 
+                        //}
+                    }
+                }
             }
-
-
-
+            
+            CreateListViewBags();
+            var rateSuppliers = ratingModel.RatingRecords.Select(r => new SelectListItem { Text = r.SupplierName + " CID:" + r.CID, Value = r.CID.ToString() }).ToList();
+            LoadSuppliers();
+            ViewBag.RatingSuppliers = rateSuppliers;
+            ratingModel.ShowResult = true;
             return View("Index", ratingModel);
 
         }
@@ -639,7 +668,7 @@ namespace SPFS.Controllers
         {
 
 
-
+            CreateListViewBags();
             return View("Index", ratingModel);
 
         }

@@ -13,7 +13,7 @@
         <div class="form-group">
             @Html.Label("Search Supplier :")
             @Html.DropDownList("RatingSuppliers", ViewBag.RatingSuppliers as IEnumerable<SelectListItem>, "",
-               new { @class = "selectpicker", data_live_search = "true", data_size = "10", data_width = "80%", required = "true", id = "RatingSuppliers" })
+               new { @class = "selectpicker", data_live_search = "true", data_size = "10", data_width = "80%", id = "RatingSuppliers" })
 
         </div>
     </div>
@@ -61,9 +61,9 @@
     <tbody id="container">
 
         @for (int i = 0; i < Model.RatingRecords.Count; i++)
-            {
+        {
 
-            <tr id="part1" data-RowId="@i">
+            <tr id="part1" data-rowid="@i">
                 <td>
                     <div class="form-horizontal">
                         @Model.RatingRecords[i].SupplierName.SplitCamelCase().Left(20)
@@ -89,7 +89,8 @@
 
 
                 <td rowspan="2">
-                    @Html.TextBoxFor(modelItem => Model.RatingRecords[i].Inbound_parts, null, new { @class = "form-control calcrow", style = "width:100%", @id = "Inbound" })
+                    @Html.TextBoxFor(modelItem => Model.RatingRecords[i].Inbound_parts, null, new { @class = "form-control calcrow onlyNumeric", maxlength = 10, style = "width:100%", @id = "Inbound" })
+                    @Html.ValidationMessageFor(modelItem => Model.RatingRecords[i].Inbound_parts)
                 </td>
                 @*<td rowspan="2"> @Html.DisplayFor(modelItem => item.Inbound_parts)</td>*@
 
@@ -109,10 +110,10 @@
                 </td>
 
 
-                <td rowspan="2">@Html.TextBoxFor(modelItem => Model.RatingRecords[i].OTR, null, new { @class = "form-control calcrow", style = "width:100%", @id = "OTR" })</td>
-
-                <td rowspan="2"> @Html.TextBoxFor(modelItem => Model.RatingRecords[i].OTD, null, new { @class = "form-control calcrow", style = "width:100%", @id = "OTD" })</td>
-
+                <td rowspan="2">@Html.TextBoxFor(modelItem => Model.RatingRecords[i].OTR, null, new { @class = "form-control calcrow onlyNumeric", maxlength = 4, style = "width:100%", @id = "OTR" })</td>
+                @Html.ValidationMessageFor(modelItem => Model.RatingRecords[i].OTR)
+                <td rowspan="2"> @Html.TextBoxFor(modelItem => Model.RatingRecords[i].OTD, null, new { @class = "form-control calcrow onlyNumeric", maxlength = 4, style = "width:100%", @id = "OTD" })</td>
+                @Html.ValidationMessageFor(modelItem => Model.RatingRecords[i].OTD)
                 <td rowspan="2">
                     <span class="Pct">
                         @Html.DisplayFor(modelItem => Model.RatingRecords[i].PCT)
@@ -120,11 +121,11 @@
                     @Html.HiddenFor(modelItem => Model.RatingRecords[i].PCT, new { @id = "PCT" })
                 </td>
 
-                <td rowspan="2"> @Html.TextBoxFor(modelItem => Model.RatingRecords[i].PFR, null, new { @class = "form-control lefttext calcrow", style = "width:60%", @id = "PFR" })</td>
-
+                <td rowspan="2"> @Html.TextBoxFor(modelItem => Model.RatingRecords[i].PFR, null, new { @class = "form-control lefttext calcrow onlyNumeric", maxlength = 4, style = "width:60%", @id = "PFR" })</td>
+                @Html.ValidationMessageFor(modelItem => Model.RatingRecords[i].PFR)
             </tr>
 
-            <tr id="part2" data-RowId="@i">
+            <tr id="part2" data-rowid="@i">
                 <td>
                     @Html.DisplayFor(modelItem => Model.RatingRecords[i].CID)
                     @Html.HiddenFor(modelItem => Model.RatingRecords[i].CID)
