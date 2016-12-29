@@ -29,7 +29,8 @@ namespace SPFS
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/jquery.bootstrap-duallistbox.js",
                        "~/Scripts/bootstrap-select.js",
-                      "~/Scripts/respond.js"
+                      "~/Scripts/respond.js",
+                      "~/Scripts/Validation.js"
                       ));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
