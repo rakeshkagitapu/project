@@ -595,3 +595,8 @@ table .header-fixed {
     }
 
 /*#endregion oldresults*/
+.errorBorderClass
+{
+background: #FEF1EC;
+    border: 1px solid #CD0A0A;
+}
