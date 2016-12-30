@@ -13,5 +13,17 @@
             this.value = this.value.replace(/[^0-9]/g, '');
         }
     });
-
+    //validation
+    jQuery.validator.addMethod(
+         "NumberGreaterZero",
+         function (value, element) {
+             var check = false;
+             if (value > 0) {
+                 check = true;
+             } else
+                 check = false;
+             return this.optional(element) || check;
+         },
+         "Value should be greater than 0"
+     );
 });
