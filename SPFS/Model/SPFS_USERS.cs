@@ -14,12 +14,11 @@ namespace SPFS.Model
     
     public partial class SPFS_USERS
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SPFS_USERS()
         {
-            this.SPFS_USERSITES = new HashSet<SPFS_USERSITES>();
             this.SPFS_STAGING_SUPPLIER_RATINGS = new HashSet<SPFS_STAGING_SUPPLIER_RATINGS>();
             this.SPFS_SUPPLIER_RATINGS = new HashSet<SPFS_SUPPLIER_RATINGS>();
+            this.SPFS_USERSITES = new HashSet<SPFS_USERSITES>();
         }
     
         public int UserID { get; set; }
@@ -37,11 +36,8 @@ namespace SPFS.Model
         public string Modified_by { get; set; }
     
         public virtual SPFS_ROLES SPFS_ROLES { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SPFS_USERSITES> SPFS_USERSITES { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SPFS_STAGING_SUPPLIER_RATINGS> SPFS_STAGING_SUPPLIER_RATINGS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SPFS_SUPPLIER_RATINGS> SPFS_SUPPLIER_RATINGS { get; set; }
+        public virtual ICollection<SPFS_USERSITES> SPFS_USERSITES { get; set; }
     }
 }

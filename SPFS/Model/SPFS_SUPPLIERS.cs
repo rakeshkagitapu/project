@@ -14,7 +14,6 @@ namespace SPFS.Model
     
     public partial class SPFS_SUPPLIERS
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SPFS_SUPPLIERS()
         {
             this.SPFS_SPEND_SUPPLIERS = new HashSet<SPFS_SPEND_SUPPLIERS>();
@@ -38,11 +37,8 @@ namespace SPFS.Model
         public Nullable<System.DateTime> Modified_date { get; set; }
         public string Modified_by { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SPFS_SPEND_SUPPLIERS> SPFS_SPEND_SUPPLIERS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SPFS_STAGING_SUPPLIER_RATINGS> SPFS_STAGING_SUPPLIER_RATINGS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SPFS_SUPPLIER_RATINGS> SPFS_SUPPLIER_RATINGS { get; set; }
     }
 }

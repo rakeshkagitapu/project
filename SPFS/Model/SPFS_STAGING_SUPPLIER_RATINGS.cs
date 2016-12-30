@@ -17,17 +17,14 @@ namespace SPFS.Model
         public int StagingID { get; set; }
         public int Rating_period { get; set; }
         public int SiteID { get; set; }
-        public int Gdis_org_entity_ID { get; set; }
-        public int Gdis_org_Parent_ID { get; set; }
         public int CID { get; set; }
-        public int Duns { get; set; }
-        public int Erp_supplier_ID { get; set; }
         public int Inbound_parts { get; set; }
         public int OTR { get; set; }
         public int OTD { get; set; }
         public int PFR { get; set; }
         public System.DateTime Initial_submission_date { get; set; }
         public Nullable<bool> Temp_Upload_ { get; set; }
+        public Nullable<bool> Interface_flag { get; set; }
         public int UserID { get; set; }
         public System.DateTime Created_date { get; set; }
         public string Created_by { get; set; }

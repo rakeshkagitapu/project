@@ -14,7 +14,6 @@ namespace SPFS.Model
     
     public partial class SPFS_SPEND_SUPPLIERS
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SPFS_SPEND_SUPPLIERS()
         {
             this.SPFS_LINK_ERP = new HashSet<SPFS_LINK_ERP>();
@@ -33,9 +32,8 @@ namespace SPFS.Model
         public Nullable<System.DateTime> Modified_date { get; set; }
         public string Modified_by { get; set; }
     
+        public virtual ICollection<SPFS_LINK_ERP> SPFS_LINK_ERP { get; set; }
         public virtual SPFS_SITES SPFS_SITES { get; set; }
         public virtual SPFS_SUPPLIERS SPFS_SUPPLIERS { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SPFS_LINK_ERP> SPFS_LINK_ERP { get; set; }
     }
 }
