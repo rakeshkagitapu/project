@@ -164,4 +164,17 @@ namespace SPFS.Models
 
 
     }
+
+    public class SubmitRecord
+    {
+        public int CID { get; set; }
+
+        public int Inbound_parts { get; set; }
+
+        public int OTR { get; set; }
+
+        public int OTD { get; set; }
+
+        public int PFR { get; set; }
+    }
 }
