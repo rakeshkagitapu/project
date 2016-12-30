@@ -1,5 +1,4 @@
 ﻿@model SPFS.Models.RatingsViewModel
-
 @{
     ViewBag.Title = "Ratings";
     var count = Model.RatingRecords != null ? Model.RatingRecords.Count : 0;
@@ -122,14 +121,19 @@
                     <a href="@Url.Action("Index", "Home")" class="btn btn-danger" onclick="return confirm('Are you sure, all data will be lost')">
                         <span class="glyphicon glyphicon-remove"></span> Cancel
                     </a>
-                    <a href="@Url.Action("Index", "Ratings")" class="btn btn-warning" onclick="return confirm('Are you sure, all data will be lost')">
-                        <span class="glyphicon glyphicon-remove-sign"></span> Clear
-                    </a>
+                    <input type="button" value="Clear" onclick="javascript:window.location=('@Url.Action("Index","Ratings")')" class="btn btn-default" />
+                    @*<a href="@Url.Action("Index", "Ratings")" class="btn btn-warning" onclick="return confirm('Are you sure, all data will be lost')">
+                            <span class="glyphicon glyphicon-remove-sign"></span> Clear
+                        </a>*@
                     <button type="submit" value="Save" onclick="OnBeginPostBack_Save(this)" name="action:SaveData" class="btn btn-primary">
                         <span class="glyphicon glyphicon-floppy-save"></span> Save
 
                     </button>
-                    <button type="submit" value="Submit" onclick="OnBeginPostBack_Submit(this)" name="action:SubmitData" class="btn btn-primary">
+                    @*<button type="submit" value="Submit" onclick="OnBeginPostBack_Submit(this)" name="action:SubmitData" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-send"></span> Submit Ratings
+
+                        </button>*@
+                    <button type="button" id="btnSubmit" class="btn btn-primary">
                         <span class="glyphicon glyphicon-send"></span> Submit Ratings
 
                     </button>
@@ -174,11 +178,6 @@
 
     if (Model.EditMode)
     {
-        @*<div id="popSup" style="overflow: auto;visibility:hidden">
-
-
-
-            </div>*@
         <div id="popSup" title="Search Supplier" style="overflow: auto;">
 
         </div>
@@ -190,19 +189,83 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
-        //$('#popSup').dialog({
-        //    autoOpen: false,
-        //    width: 470,
-        //    height: 440,
-        //    resizable: false,
-        //    title: 'Search Supplier',
-        //    modal: true,
-        //    open: function (event, ui) {
+        $('#btnSubmit').click(function () {
+            debugger;
 
-        //    }
-        //});
+            var Records = [];
+            var CID, Inbound, OTR, OTD, PFR;
+            var len = $('tr').length;
+            for (var i = 2; i < len; i += 2) {
 
+                CID =  parseInt($('tr')[i + 1].cells['0'].innerText, 10);
 
+                Inbound = $('#RatingRecords_' + i + '__Inbound_parts').val();
+                OTR = parseInt($('tr')[i].cells['7'].innerText, 10);
+                OTD = parseInt($('tr')[i].cells['8'].innerText, 10);
+                PFR = parseInt($('tr')[i].cells['10'].innerText, 10);
+                //Inbound = parseInt($('tr')[i].cells['4'].innerText, 10);
+                //OTR = parseInt($('tr')[i].cells['7'].innerText, 10);
+                //OTD = parseInt($('tr')[i].cells['8'].innerText, 10);
+                //PFR = parseInt($('tr')[i].cells['10'].innerText, 10);
+                if (isFinite(Inbound)) {
+
+                } else {
+                    Inbound = 0;
+                }
+                if (isFinite(OTR)) {
+
+                } else {
+                    OTR = 0;
+                }
+                if (isFinite(OTD)) {
+
+                } else {
+                    OTD = 0;
+                }
+                if (isFinite(PFR)) {
+                } else {
+                    PFR = 0;
+                }
+                if (Inbound > 0) {
+                    Records.push({ CID: CID, Inbound: Inbound, OTR: OTR, OTD: OTD, PFR: PFR })
+                }
+            }
+            //$('tr').add('#container tr:nth-child(n-1)').each(function () {
+
+            //});
+            var siteID = @Html.Raw(Json.Encode(Model.SiteID));
+            var month =@Html.Raw(Json.Encode(Model.Month));
+            var year = @Html.Raw(Json.Encode(Model.Year));
+            debugger
+            if (Records.length > 0 && confirm('Are you sure you want to Submit these Records?')) {
+                $("#dlgmodal").dialog('open');
+                $('#dlgmodal span').text('Submitting Records...');
+                $.ajax({
+                    url: '@Url.Action("SubmitRatings", "Ratings")',
+
+                    data:  JSON.stringify({ 'SubmittedRecords': Records,SiteID: siteID, Month: month, Year:year}),
+                    traditional: true,
+                    contentType: "application/json; charset=utf-8",
+                    type: 'POST',
+                    cache: false,
+                    async: false,
+                    success: function (data) {
+                        showMessage();
+                        $('#output').children().remove();
+                        $('#output').append($(data));
+                    },
+                    complete: function (jqXHR, textStatus, errorThrown) {
+                        GetNotificationCount();
+                        $("#dlgmodal").closest('.ui-dialog-content').dialog("close");
+                    }
+                });
+
+            }
+            else {
+                alert('No rows to save');
+            }
+
+        });
         if ('@Model.IsAlert' == 'True') {
             var bgColor = '#f2dede';
             var bgOriginal = $('#Alertpanel').css('background-color');
@@ -474,6 +537,7 @@
                 error: function (ts) { alert(ts.responseText) }
             });
         });
+
 
 
     });
