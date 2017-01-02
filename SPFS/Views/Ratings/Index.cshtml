@@ -259,10 +259,12 @@
                     complete: function (jqXHR, textStatus, errorThrown) {
                         $("#dlgmodal").closest('.ui-dialog-content').dialog("close");
 
-                        var url = '@Url.Action("SavedResults", "Ratings")';
-                        url = url + '?SiteID=' + siteId + '&Year = ' + year + '&Month = '+ month;
+                        @*var url = '@Url.Action("SavedResults", "Ratings")';
+                        url = url + '?SiteID=' + siteId + '&Year = ' + year + '&Month = '+ month;*@
                         debugger;
-                        window.location = url;
+                        @*window.location = @Html.Raw(url);*@
+
+                        window.location.href = "@Html.Raw(@Url.Action("SavedResults", "Ratings", new { @SiteID= @Html.Raw(Json.Encode(Model.SiteID)), @Year = @Html.Raw(Json.Encode(Model.Year)), @Month= @Html.Raw(Json.Encode(Model.Month))}))";
                     }
 
                 });
