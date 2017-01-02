@@ -125,7 +125,11 @@
                     @*<a href="@Url.Action("Index", "Ratings")" class="btn btn-warning" onclick="return confirm('Are you sure, all data will be lost')">
                             <span class="glyphicon glyphicon-remove-sign"></span> Clear
                         </a>*@
-                    <button type="submit" value="Save" onclick="OnBeginPostBack_Save(this)" name="action:SaveData" class="btn btn-primary">
+                    @*<button type="submit" value="Save" onclick="OnBeginPostBack_Save(this)" name="action:SaveData" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-floppy-save"></span> Save
+
+                        </button>*@
+                    <button type="submit" id="btnSave" class="btn btn-primary">
                         <span class="glyphicon glyphicon-floppy-save"></span> Save
 
                     </button>
@@ -188,25 +192,19 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-
-        $('#btnSubmit').click(function () {
-            debugger;
-
+        $('#btnSave').click(function () {
+            debugger
             var Records = [];
             var CID, Inbound, OTR, OTD, PFR;
-            var len = $('tr').length;
-            for (var i = 2; i < len; i += 2) {
+            var len = ($('#container tr').length)/2;
+            for (var i = 0; i < len; i += 1) {
 
-                CID =  parseInt($('tr')[i + 1].cells['0'].innerText, 10);
-
+                CID =  $('#RatingRecords_' + i + '__CID').val();//parseInt($('#container tr')[i + 1].cells['0'].innerText, 10);
                 Inbound = $('#RatingRecords_' + i + '__Inbound_parts').val();
-                OTR = parseInt($('tr')[i].cells['7'].innerText, 10);
-                OTD = parseInt($('tr')[i].cells['8'].innerText, 10);
-                PFR = parseInt($('tr')[i].cells['10'].innerText, 10);
-                //Inbound = parseInt($('tr')[i].cells['4'].innerText, 10);
-                //OTR = parseInt($('tr')[i].cells['7'].innerText, 10);
-                //OTD = parseInt($('tr')[i].cells['8'].innerText, 10);
-                //PFR = parseInt($('tr')[i].cells['10'].innerText, 10);
+                OTR = $('#RatingRecords_' + i + '__OTR').val();
+                OTD = $('#RatingRecords_' + i + '__OTD').val();
+                PFR = $('#RatingRecords_' + i + '__PFR').val();
+
                 if (isFinite(Inbound)) {
 
                 } else {
@@ -227,7 +225,94 @@
                     PFR = 0;
                 }
                 if (Inbound > 0) {
-                    Records.push({ CID: CID, Inbound: Inbound, OTR: OTR, OTD: OTD, PFR: PFR })
+                    Records.push({ CID: CID, Inbound_parts: Inbound, OTR: OTR, OTD: OTD, PFR: PFR })
+                }
+            }
+
+            var siteID = @Html.Raw(Json.Encode(Model.SiteID));
+            var month =@Html.Raw(Json.Encode(Model.Month));
+            var year = @Html.Raw(Json.Encode(Model.Year));
+
+            @*var CIDarray =[];
+            var RateSuppliers = @Html.Raw(Json.Encode(ViewBag.RatingSuppliers));
+
+            for( i = 0; i < RateSuppliers.length; i++)
+            {
+                CIDarray.push(RateSuppliers[i].Value);
+            }*@
+
+            if (Records.length > 0) {
+                $("#dlgmodal").dialog('open');
+                $('#dlgmodal span').text('Saving Records...');
+                $.ajax({
+                    url: '@Url.Action("SaveRatings", "Ratings")',
+                    data:  JSON.stringify({ 'SavedRecords': Records,SiteID: siteID, Month: month, Year:year}), //,CIDArray:CIDarray}),
+                    traditional: true,
+                    contentType: "application/json; charset=utf-8",
+                    type: 'POST',
+                    cache: false,
+                    async: false,
+                    success: function (data) {
+
+
+                    },
+                    complete: function (jqXHR, textStatus, errorThrown) {
+                        $("#dlgmodal").closest('.ui-dialog-content').dialog("close");
+
+                        var url = '@Url.Action("SavedResults", "Ratings")';
+                        url = url + '?SiteID=' + siteId + '&Year = ' + year + '&Month = '+ month;
+                        debugger;
+                        window.location = url;
+                    }
+
+                });
+
+            }
+            else {
+                alert('No rows to save');
+            }
+
+        });
+        $('#btnSubmit').click(function () {
+            debugger;
+
+            var Records = [];
+            var CID, Inbound, OTR, OTD, PFR;
+            var len = ($('#container tr').length)/2;
+            for (var i = 0; i < len; i += 1) {
+
+                CID =  $('#RatingRecords_' + i + '__CID').val();//parseInt($('#container tr')[i + 1].cells['0'].innerText, 10);
+                Inbound = $('#RatingRecords_' + i + '__Inbound_parts').val();
+                OTR = $('#RatingRecords_' + i + '__OTR').val();
+                OTD = $('#RatingRecords_' + i + '__OTD').val();
+                PFR = $('#RatingRecords_' + i + '__PFR').val();
+
+                //Inbound = parseInt($('#container tr')[i].cells['4'].innerText, 10);
+                //OTR = parseInt($('#container tr')[i].cells['7'].innerText, 10);
+                //OTD = parseInt($('#container tr')[i].cells['8'].innerText, 10);
+                //PFR = parseInt($('#container tr')[i].cells['10'].innerText, 10);
+
+                if (isFinite(Inbound)) {
+
+                } else {
+                    Inbound = 0;
+                }
+                if (isFinite(OTR)) {
+
+                } else {
+                    OTR = 0;
+                }
+                if (isFinite(OTD)) {
+
+                } else {
+                    OTD = 0;
+                }
+                if (isFinite(PFR)) {
+                } else {
+                    PFR = 0;
+                }
+                if (Inbound > 0) {
+                    Records.push({ CID: CID, Inbound_parts: Inbound, OTR: OTR, OTD: OTD, PFR: PFR })
                 }
             }
             //$('tr').add('#container tr:nth-child(n-1)').each(function () {
@@ -250,12 +335,10 @@
                     cache: false,
                     async: false,
                     success: function (data) {
-                        showMessage();
-                        $('#output').children().remove();
-                        $('#output').append($(data));
+
                     },
                     complete: function (jqXHR, textStatus, errorThrown) {
-                        GetNotificationCount();
+
                         $("#dlgmodal").closest('.ui-dialog-content').dialog("close");
                     }
                 });
@@ -309,6 +392,7 @@
         });
 
         function SearchSupplierByName(SupName) {
+            debugger
             $.ajax({
                 url: '@Url.Action("GetSupplierbyName", "Ratings")',
                 //Passes the content of an input up
@@ -328,7 +412,7 @@
         };
 
         $('.btnAdd').bind("click", function () {
-
+            debugger
             $.ajax({
                 url: '@Url.Action("LoadSuppliers", "Ratings")',
                 //Passes the content of an input up
@@ -380,6 +464,7 @@
                     });
                 }
                 else {
+                    debugger
                     $.ajax({
                         url: '@Url.Action("AddRowReload", "Ratings")',
                         //Passes the content of an input up
@@ -425,7 +510,7 @@
 
 
         $('#RatingSuppliers').change(function () {
-
+            debugger
             var cid = $("#RatingSuppliers option:selected").val();
             if (cid != "") {
                 $("#ratings").find('tr').removeClass('active');
@@ -491,30 +576,38 @@
 
         //});
         $('#container').on("change", ".calcrow", function () {
-            //debugger
-            var inbound = $(this).closest('tr').find('#Inbound').val();
-            var otr = $(this).closest('tr').find('#OTR').val();
-            var otd = $(this).closest('tr').find('#OTD').val();
-            var pfr = $(this).closest('tr').find('#PFR').val();
+
+            //var inbound = $(this).closest('tr').find('#Inbound').val();
+            //var otr = $(this).closest('tr').find('#OTR').val();
+            //var otd = $(this).closest('tr').find('#OTD').val();
+            //var pfr = $(this).closest('tr').find('#PFR').val();
+            //var ri = $(this).closest('tr').find('#RI').val();
+            //var rp = $(this).closest('tr').find('#RP').val();
+            var rowid = $(this).closest('tr').first().attr('data-RowId');
+
+            var inbound = $('#RatingRecords_' + rowid + '__Inbound_parts').val();
+            var otr =$('#RatingRecords_' + rowid + '__OTR').val();
+            var otd = $('#RatingRecords_' + rowid + '__OTD').val();
+            var pfr = $('#RatingRecords_' + rowid + '__PFR').val();
             var ri = $(this).closest('tr').find('#RI').val();
             var rp = $(this).closest('tr').find('#RP').val();
-            var rowid = $(this).closest('tr').first().attr('data-RowId');
 
             var ppm = Math.round((rp / inbound) * 1000000);
             var ipm = ((ri / inbound) * 1000000).toFixed(2);
             var pct = Math.round((otr / otd) * 100);
 
             if (isFinite(ppm)) {
-
+                $(this).closest('tr').find('.Ppm').html(ppm);
             } else {
                 ppm = 0;
             }
             if (isFinite(ipm)) {
-
+                $(this).closest('tr').find('.Ipm').html(ipm);
             } else {
                 ipm = 0.00;
             }
             if (isFinite(pct)) {
+                $(this).closest('tr').find('.Pct').html(pct);
             } else {
                 pct = 0;
             }

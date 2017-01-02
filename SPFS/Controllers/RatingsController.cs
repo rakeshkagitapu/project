@@ -35,7 +35,8 @@ namespace SPFS.Controllers
         public ActionResult Index(int? SiteID, bool isUpload = false)
         {
             RatingsViewModel ratingsViewModel = new RatingsViewModel { SiteID = SiteID, isUpload = isUpload, RatingRecords = new List<RatingRecord>() };
-            ratingsViewModel.Month = DateTime.Now.Month - 1;
+            ratingsViewModel.Month = DateTime.Now.Month - 1 == 0 ? 12 : DateTime.Now.Month;
+
             ratingsViewModel.Year = DateTime.Now.Year;
 
             CreateListViewBags();
@@ -77,6 +78,19 @@ namespace SPFS.Controllers
             ViewBag.Years = util.GetYears(false);
             ViewBag.Sites = sites;
         }
+
+        public ActionResult SavedResults(int? SiteID, int? Year, int? Month)
+        {
+            RatingsViewModel ratingModel = new RatingsViewModel();
+            CreateListViewBags();
+            ViewBag.Suppliers = selectSuppliers.Select(r => new SelectListItem { Text = r.Text + " CID:" + r.Value, Value = r.Value }).ToList();
+            ratingModel.ShowResult = false;
+            ratingModel.OldResults = false;
+            ratingModel.EditMode = true;
+            return View("Index", ratingModel);
+        }
+
+
 
         //checks if there are any existing uploads 
         // displays warning if there are existing uploads in same month
@@ -351,6 +365,7 @@ namespace SPFS.Controllers
                         OTR = ratings.OTR,
                         OTD = ratings.OTD,
                         PFR = ratings.PFR
+
                     }).ToList();
         }
 
@@ -754,29 +769,29 @@ namespace SPFS.Controllers
             SupplierList.Where(s => s.Text.StartsWith(nameString, StringComparison.InvariantCultureIgnoreCase));
             return Json(newSuppliercache, JsonRequestBehavior.AllowGet);
         }
-        public static List<SPFS_STAGING_SUPPLIER_RATINGS> ConvertViewModelsToModels(RatingsViewModel ratingModel)
+        public static List<SPFS_STAGING_SUPPLIER_RATINGS> ConvertViewModelsToModels(List<SubmitRecord> records, int SiteID, int Year, int Month)
         {
             List<SPFS_STAGING_SUPPLIER_RATINGS> DatabaseRecords = new List<SPFS_STAGING_SUPPLIER_RATINGS>();
             Utilities util = new Utilities();
 
-            int CheckingDate = Convert.ToInt32("" + ratingModel.Year + ratingModel.Month.ToString().PadLeft(2, '0'));
-            foreach (var item in ratingModel.RatingRecords)
+            int CheckingDate = Convert.ToInt32("" + Year + Month.ToString().PadLeft(2, '0'));
+            foreach (var item in records)
             {
                 DatabaseRecords.Add(new SPFS_STAGING_SUPPLIER_RATINGS
                 {
                     Rating_period = CheckingDate,
-                    SiteID = (int)ratingModel.SiteID,
+                    SiteID = SiteID,
                     CID = item.CID,
                     Inbound_parts = item.Inbound_parts,
                     OTR = item.OTR,
                     OTD = item.OTD,
                     PFR = item.PFR,
-                    Initial_submission_date = item.Initial_submission_date == null ? DateTime.Now : item.Initial_submission_date,
+                    Initial_submission_date = DateTime.Now,
                     Temp_Upload_ = false,
                     Interface_flag = false,
-                    UserID = item.UserID <= 0 ? util.GetCurrentUser().UserID : item.UserID,
-                    Created_date = item.Created_date == null ? DateTime.Now : item.Created_date,
-                    Created_by = item.Created_by == null ? util.GetCurrentUser().UserName : item.Created_by,
+                    UserID = util.GetCurrentUser().UserID,
+                    Created_date = DateTime.Now,
+                    Created_by = util.GetCurrentUser().UserName,
                     Modified_date = DateTime.Now,
                     Modified_by = util.GetCurrentUser().UserName
 
@@ -819,5 +834,98 @@ namespace SPFS.Controllers
             return View();
 
         }
+
+
+        public ActionResult SaveRatings(List<SubmitRecord> SavedRecords, int SiteID, int Month, int Year) //,List<int> CIDArray)
+        {
+
+            RatingsViewModel ratingModel = new RatingsViewModel { SiteID = SiteID, Month = Month, Year = Year };
+            int CheckingDate = Convert.ToInt32("" + ratingModel.Year + ratingModel.Month.ToString().PadLeft(2, '0'));
+            Utilities util = new Utilities();
+            List<SubmitRecord> NewRecords = new List<SubmitRecord>();
+
+            List<SubmitRecord> ExistingRecords = new List<SubmitRecord>();
+
+            //List<SPFS_STAGING_SUPPLIER_RATINGS> stagerecords = new List<SPFS_STAGING_SUPPLIER_RATINGS>();
+            using (Repository repository = new Repository())
+            {
+                //stagerecords = repository.Context.SPFS_STAGING_SUPPLIER_RATINGS.Where(s => s.SiteID == SiteID && s.Rating_period == CheckingDate).ToList();
+
+                foreach (var item in SavedRecords)
+                {
+
+                    if (repository.Context.SPFS_STAGING_SUPPLIER_RATINGS.Any(s => s.SiteID == SiteID && s.Rating_period == CheckingDate && s.CID == item.CID))
+                    {
+                        var rec = repository.Context.SPFS_STAGING_SUPPLIER_RATINGS.Where(s => s.SiteID == SiteID && s.Rating_period == CheckingDate && s.CID == item.CID).FirstOrDefault();
+                        if (rec != null)
+                        {
+                            rec.Inbound_parts = item.Inbound_parts;
+                            rec.OTD = item.OTD;
+                            rec.OTR = item.OTR;
+                            rec.PFR = item.PFR;
+                            rec.UserID = util.GetCurrentUser().UserID;
+                            rec.Modified_date = DateTime.Now;
+                            rec.Modified_by = util.GetCurrentUser().UserName;
+                        }
+                        repository.Context.SaveChanges();
+
+                    }
+                    else
+                    {
+                        NewRecords.Add(item);
+
+                    }
+                }
+                if (NewRecords.Count > 0)
+                {
+                    var convertedrecords = ConvertViewModelsToModels(NewRecords, SiteID, Year, Month);
+
+                    repository.Context.SPFS_STAGING_SUPPLIER_RATINGS.AddRange(convertedrecords);
+                    repository.Context.SaveChanges();
+                }
+
+                List<RatingRecord> prodrecs = ProdRecords(ratingModel, CheckingDate, repository);
+                List<RatingRecord> stagrecs = StageRecords(ratingModel, CheckingDate, repository);
+                ratingModel.RatingRecords = prodrecs != null ? prodrecs.Union(stagrecs).ToList() : stagrecs;
+
+
+
+            }
+
+
+            RatingsViewModel UpdatedModel = Merge(ratingModel);
+            CreateListViewBags();
+
+
+            //RatingsViewModel RatingModel = (RatingsViewModel)TempData["SearchedResults"];
+
+
+            // var rateSuppliers = CIDArray.Select(r => new SelectListItem { Text = GetSupplierDataByCID(r, SiteID).SupplierName + " CID:" + r, Value = r.ToString() }).ToList();
+            var rateSuppliers = UpdatedModel.RatingRecords.Select(r => new SelectListItem { Text = r.SupplierName + " CID:" + r.CID, Value = r.CID.ToString() }).ToList();
+
+            ViewBag.RatingSuppliers = rateSuppliers;
+
+            return View("_SupplierRatings", UpdatedModel);
+            //var modifiedlist = selectSupplierscid;
+            //var NotinListSuppliers = (from fulllist in modifiedlist
+            //                          where !(rateSuppliers.Any(r => r.Value == fulllist.Value))
+            //                          select fulllist).ToList();
+            //if (NotinListSuppliers != null)
+            //{
+            //    ViewBag.Suppliers = NotinListSuppliers;
+            //}
+            //else
+            //{
+            //    ViewBag.Suppliers = modifiedlist;
+            //}
+
+            //ViewBag.RatingSuppliers = rateSuppliers;
+            //UpdatedModel.ShowResult = true;
+            //UpdatedModel.OldResults = false;
+            //UpdatedModel.EditMode = true;
+            //return View("Index", UpdatedModel);
+
+        }
+
     }
 }
