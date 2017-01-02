@@ -25,12 +25,16 @@ namespace SPFS
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/jquery-ui-{version}.js",
                       "~/Scripts/bootstrap.js",
+                      "~/Scripts/respond.js",
                       "~/Scripts/jquery.bootstrap-duallistbox.js",
                        "~/Scripts/bootstrap-select.js",
-                      "~/Scripts/respond.js",
-                      "~/Scripts/Validation.js"
+                       "~/Scripts/jquery-ui-{version}.js",
+                       "~/Scripts/Validation.js",
+                      "~/Scripts/ValidationStyling.js"
+
+
+
                       ));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
