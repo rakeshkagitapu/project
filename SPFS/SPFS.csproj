@@ -431,7 +431,6 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\bootstrap-select.css.map" />
     <EntityDeploy Include="Model\SPFSContext.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>SPFSContext.Designer.cs</LastGenOutput>
@@ -439,6 +438,7 @@
     <Content Include="Model\SPFSContext.edmx.diagram">
       <DependentUpon>SPFSContext.edmx</DependentUpon>
     </Content>
+    <Content Include="Content\bootstrap-select.css.map" />
     <None Include="Properties\PublishProfiles\QA Deploy Review.pubxml" />
     <None Include="Properties\PublishProfiles\QA Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\SPFS QA.pubxml">
@@ -446,7 +446,6 @@
     </None>
     <None Include="Properties\PublishProfiles\SPFS_QA.pubxml" />
     <Content Include="Scripts\bootstrap-select.js.map" />
-    <Content Include="Scripts\fxheader2.js" />
     <Content Include="Scripts\i18n\defaults-ar_AR.js" />
     <Content Include="Scripts\i18n\defaults-ar_AR.min.js" />
     <Content Include="Scripts\i18n\defaults-bg_BG.js" />

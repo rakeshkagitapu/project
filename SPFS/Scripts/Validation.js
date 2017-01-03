@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-
+    
     $('.decimalNumeric').keyup(function () {
 
         if (this.value.match(/[^(10|\d)(\.\d{1,2})?]/g)) {

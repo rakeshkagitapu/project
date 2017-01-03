@@ -24,7 +24,7 @@ namespace SPFS.Models
         }
 
         public int UserID { get; set; }
-        [Required]
+       
         [StringLength(75)]
         [Display(Name = "User Name")]
         public string UserName { get; set; }

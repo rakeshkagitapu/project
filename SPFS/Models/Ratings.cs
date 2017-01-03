@@ -35,11 +35,12 @@ namespace SPFS.Models
 
         public bool ShowResult { get; set; }
 
+        public bool ShowSubmit { get; set; }
         public bool OldResults { get; set; }
     }
     public class ExcelRatingsViewModel : RatingsViewModel
     {
-
+       
 
         [Display(Name = "Upload File:")]
         public HttpPostedFileBase UploadFile { get; set; }
@@ -89,7 +90,7 @@ namespace SPFS.Models
         {
             get
             {
-                if (ErrorInformation != null)
+                if (ErrorInformation!=null)
                 {
                     var data = ErrorInformation.Select(hm => hm.ErrorMessage);
                     return string.Join("\r\n", data);
@@ -168,7 +169,7 @@ namespace SPFS.Models
     public class SubmitRecord
     {
         public int CID { get; set; }
-
+             
         public int Inbound_parts { get; set; }
 
         public int OTR { get; set; }

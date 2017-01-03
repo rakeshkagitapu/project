@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SPFS.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SPFS.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="SPFS_LINK_ERP">
           <Key>
             <PropertyRef Name="Spend_supplier_ID" />
@@ -358,20 +358,10 @@
             <End Role="SPFS_USERSITES" EntitySet="SPFS_USERSITES" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SPFS" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="SPFS_LINK_ERP">
-          <Key>
-            <PropertyRef Name="Spend_supplier_ID" />
-            <PropertyRef Name="Erp_supplier_ID" />
-          </Key>
-          <Property Name="Spend_supplier_ID" Type="Int32" Nullable="false" />
-          <Property Name="Erp_supplier_ID" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="SPFS_SPEND_SUPPLIERS" Relationship="Self.FK_SPFS_LINK_ERP_SPFS_SPEND_SUPPLIERS" FromRole="SPFS_LINK_ERP" ToRole="SPFS_SPEND_SUPPLIERS" />
-        </EntityType>
         <EntityType Name="SPFS_ROLES">
           <Key>
             <PropertyRef Name="RoleID" />
@@ -406,9 +396,9 @@
           <Property Name="Modified_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SPEND_INC_FLAG" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="SPFS_SPEND_SUPPLIERS" Relationship="Self.FK_SPFS_SPEND_SUPPLIERS_SPFS_SITES" FromRole="SPFS_SITES" ToRole="SPFS_SPEND_SUPPLIERS" />
-          <NavigationProperty Name="SPFS_STAGING_SUPPLIER_RATINGS" Relationship="Self.FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_SITES" FromRole="SPFS_SITES" ToRole="SPFS_STAGING_SUPPLIER_RATINGS" />
-          <NavigationProperty Name="SPFS_SUPPLIER_RATINGS" Relationship="Self.FK_SPFS_SUPPLIER_RATINGS_SPFS_SITES" FromRole="SPFS_SITES" ToRole="SPFS_SUPPLIER_RATINGS" />
           <NavigationProperty Name="SPFS_USERSITES" Relationship="Self.FK_SPFS_USERSITES_SPFS_SITES" FromRole="SPFS_SITES" ToRole="SPFS_USERSITES" />
+          <NavigationProperty Name="SPFS_SUPPLIER_RATINGS" Relationship="SPFS.FK_SPFS_SUPPLIER_RATINGS_SPFS_SITES" FromRole="SPFS_SITES" ToRole="SPFS_SUPPLIER_RATINGS" />
+          <NavigationProperty Name="SPFS_STAGING_SUPPLIER_RATINGS" Relationship="SPFS.FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_SITES" FromRole="SPFS_SITES" ToRole="SPFS_STAGING_SUPPLIER_RATINGS" />
         </EntityType>
         <EntityType Name="SPFS_SPEND_SUPPLIERS">
           <Key>
@@ -426,57 +416,9 @@
           <Property Name="Created_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Modified_date" Type="DateTime" Precision="0" />
           <Property Name="Modified_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="SPFS_LINK_ERP" Relationship="Self.FK_SPFS_LINK_ERP_SPFS_SPEND_SUPPLIERS" FromRole="SPFS_SPEND_SUPPLIERS" ToRole="SPFS_LINK_ERP" />
           <NavigationProperty Name="SPFS_SITES" Relationship="Self.FK_SPFS_SPEND_SUPPLIERS_SPFS_SITES" FromRole="SPFS_SPEND_SUPPLIERS" ToRole="SPFS_SITES" />
           <NavigationProperty Name="SPFS_SUPPLIERS" Relationship="Self.FK_SPFS_SPEND_SUPPLIERS_SPFS_SUPPLIERS" FromRole="SPFS_SPEND_SUPPLIERS" ToRole="SPFS_SUPPLIERS" />
-        </EntityType>
-        <EntityType Name="SPFS_STAGING_SUPPLIER_RATINGS">
-          <Key>
-            <PropertyRef Name="StagingID" />
-          </Key>
-          <Property Name="StagingID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Rating_period" Type="Int32" Nullable="false" />
-          <Property Name="SiteID" Type="Int32" Nullable="false" />
-          <Property Name="CID" Type="Int32" Nullable="false" />
-          <Property Name="Inbound_parts" Type="Int32" Nullable="false" />
-          <Property Name="OTR" Type="Int32" Nullable="false" />
-          <Property Name="OTD" Type="Int32" Nullable="false" />
-          <Property Name="PFR" Type="Int32" Nullable="false" />
-          <Property Name="Initial_submission_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Temp_Upload_" Type="Boolean" />
-          <Property Name="Interface_flag" Type="Boolean" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="Created_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Created_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Modified_date" Type="DateTime" Precision="0" />
-          <Property Name="Modified_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="SPFS_SITES" Relationship="Self.FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_SITES" FromRole="SPFS_STAGING_SUPPLIER_RATINGS" ToRole="SPFS_SITES" />
-          <NavigationProperty Name="SPFS_SUPPLIERS" Relationship="Self.FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_SUPPLIERS" FromRole="SPFS_STAGING_SUPPLIER_RATINGS" ToRole="SPFS_SUPPLIERS" />
-          <NavigationProperty Name="SPFS_USERS" Relationship="Self.FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_USERS" FromRole="SPFS_STAGING_SUPPLIER_RATINGS" ToRole="SPFS_USERS" />
-        </EntityType>
-        <EntityType Name="SPFS_SUPPLIER_RATINGS">
-          <Key>
-            <PropertyRef Name="RatingsID" />
-          </Key>
-          <Property Name="RatingsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Rating_period" Type="Int32" Nullable="false" />
-          <Property Name="SiteID" Type="Int32" Nullable="false" />
-          <Property Name="CID" Type="Int32" Nullable="false" />
-          <Property Name="Inbound_parts" Type="Int32" Nullable="false" />
-          <Property Name="OTR" Type="Int32" Nullable="false" />
-          <Property Name="OTD" Type="Int32" Nullable="false" />
-          <Property Name="PFR" Type="Int32" Nullable="false" />
-          <Property Name="Initial_submission_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Temp_Upload_" Type="Boolean" />
-          <Property Name="Interface_flag" Type="Boolean" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="Created_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="Created_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Modified_date" Type="DateTime" Precision="0" />
-          <Property Name="Modified_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="SPFS_SITES" Relationship="Self.FK_SPFS_SUPPLIER_RATINGS_SPFS_SITES" FromRole="SPFS_SUPPLIER_RATINGS" ToRole="SPFS_SITES" />
-          <NavigationProperty Name="SPFS_SUPPLIERS" Relationship="Self.FK_SPFS_SUPPLIER_RATINGS_SPFS_SUPPLIERS" FromRole="SPFS_SUPPLIER_RATINGS" ToRole="SPFS_SUPPLIERS" />
-          <NavigationProperty Name="SPFS_USERS" Relationship="Self.FK_SPFS_SUPPLIER_RATINGS_SPFS_USERS" FromRole="SPFS_SUPPLIER_RATINGS" ToRole="SPFS_USERS" />
+          <NavigationProperty Name="SPFS_LINK_ERP" Relationship="SPFS.FK_SPFS_LINK_ERP_SPFS_SPEND_SUPPLIERS" FromRole="SPFS_SPEND_SUPPLIERS" ToRole="SPFS_LINK_ERP" />
         </EntityType>
         <EntityType Name="SPFS_SUPPLIERS">
           <Key>
@@ -498,8 +440,8 @@
           <Property Name="Modified_date" Type="DateTime" Precision="0" />
           <Property Name="Modified_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="SPFS_SPEND_SUPPLIERS" Relationship="Self.FK_SPFS_SPEND_SUPPLIERS_SPFS_SUPPLIERS" FromRole="SPFS_SUPPLIERS" ToRole="SPFS_SPEND_SUPPLIERS" />
-          <NavigationProperty Name="SPFS_STAGING_SUPPLIER_RATINGS" Relationship="Self.FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_SUPPLIERS" FromRole="SPFS_SUPPLIERS" ToRole="SPFS_STAGING_SUPPLIER_RATINGS" />
-          <NavigationProperty Name="SPFS_SUPPLIER_RATINGS" Relationship="Self.FK_SPFS_SUPPLIER_RATINGS_SPFS_SUPPLIERS" FromRole="SPFS_SUPPLIERS" ToRole="SPFS_SUPPLIER_RATINGS" />
+          <NavigationProperty Name="SPFS_SUPPLIER_RATINGS" Relationship="SPFS.FK_SPFS_SUPPLIER_RATINGS_SPFS_SUPPLIERS" FromRole="SPFS_SUPPLIERS" ToRole="SPFS_SUPPLIER_RATINGS" />
+          <NavigationProperty Name="SPFS_STAGING_SUPPLIER_RATINGS" Relationship="SPFS.FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_SUPPLIERS" FromRole="SPFS_SUPPLIERS" ToRole="SPFS_STAGING_SUPPLIER_RATINGS" />
         </EntityType>
         <EntityType Name="SPFS_USERS">
           <Key>
@@ -519,9 +461,9 @@
           <Property Name="Modified_date" Type="DateTime" Precision="0" />
           <Property Name="Modified_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="SPFS_ROLES" Relationship="Self.FK_SPFS_USERS_SPFS_ROLES" FromRole="SPFS_USERS" ToRole="SPFS_ROLES" />
-          <NavigationProperty Name="SPFS_STAGING_SUPPLIER_RATINGS" Relationship="Self.FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_USERS" FromRole="SPFS_USERS" ToRole="SPFS_STAGING_SUPPLIER_RATINGS" />
-          <NavigationProperty Name="SPFS_SUPPLIER_RATINGS" Relationship="Self.FK_SPFS_SUPPLIER_RATINGS_SPFS_USERS" FromRole="SPFS_USERS" ToRole="SPFS_SUPPLIER_RATINGS" />
           <NavigationProperty Name="SPFS_USERSITES" Relationship="Self.FK_SPFS_USERSITES_SPFS_USERS" FromRole="SPFS_USERS" ToRole="SPFS_USERSITES" />
+          <NavigationProperty Name="SPFS_SUPPLIER_RATINGS" Relationship="SPFS.FK_SPFS_SUPPLIER_RATINGS_SPFS_USERS" FromRole="SPFS_USERS" ToRole="SPFS_SUPPLIER_RATINGS" />
+          <NavigationProperty Name="SPFS_STAGING_SUPPLIER_RATINGS" Relationship="SPFS.FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_USERS" FromRole="SPFS_USERS" ToRole="SPFS_STAGING_SUPPLIER_RATINGS" />
         </EntityType>
         <EntityType Name="SPFS_USERSITES">
           <Key>
@@ -537,18 +479,6 @@
           <NavigationProperty Name="SPFS_SITES" Relationship="Self.FK_SPFS_USERSITES_SPFS_SITES" FromRole="SPFS_USERSITES" ToRole="SPFS_SITES" />
           <NavigationProperty Name="SPFS_USERS" Relationship="Self.FK_SPFS_USERSITES_SPFS_USERS" FromRole="SPFS_USERSITES" ToRole="SPFS_USERS" />
         </EntityType>
-        <Association Name="FK_SPFS_LINK_ERP_SPFS_SPEND_SUPPLIERS">
-          <End Role="SPFS_SPEND_SUPPLIERS" Type="Self.SPFS_SPEND_SUPPLIERS" Multiplicity="1" />
-          <End Role="SPFS_LINK_ERP" Type="Self.SPFS_LINK_ERP" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SPFS_SPEND_SUPPLIERS">
-              <PropertyRef Name="Spend_supplier_ID" />
-            </Principal>
-            <Dependent Role="SPFS_LINK_ERP">
-              <PropertyRef Name="Spend_supplier_ID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SPFS_USERS_SPFS_ROLES">
           <End Role="SPFS_ROLES" Type="Self.SPFS_ROLES" Multiplicity="1" />
           <End Role="SPFS_USERS" Type="Self.SPFS_USERS" Multiplicity="*" />
@@ -569,30 +499,6 @@
               <PropertyRef Name="SiteID" />
             </Principal>
             <Dependent Role="SPFS_SPEND_SUPPLIERS">
-              <PropertyRef Name="SiteID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_SITES">
-          <End Role="SPFS_SITES" Type="Self.SPFS_SITES" Multiplicity="1" />
-          <End Role="SPFS_STAGING_SUPPLIER_RATINGS" Type="Self.SPFS_STAGING_SUPPLIER_RATINGS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SPFS_SITES">
-              <PropertyRef Name="SiteID" />
-            </Principal>
-            <Dependent Role="SPFS_STAGING_SUPPLIER_RATINGS">
-              <PropertyRef Name="SiteID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SPFS_SUPPLIER_RATINGS_SPFS_SITES">
-          <End Role="SPFS_SITES" Type="Self.SPFS_SITES" Multiplicity="1" />
-          <End Role="SPFS_SUPPLIER_RATINGS" Type="Self.SPFS_SUPPLIER_RATINGS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SPFS_SITES">
-              <PropertyRef Name="SiteID" />
-            </Principal>
-            <Dependent Role="SPFS_SUPPLIER_RATINGS">
               <PropertyRef Name="SiteID" />
             </Dependent>
           </ReferentialConstraint>
@@ -621,54 +527,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_SUPPLIERS">
-          <End Role="SPFS_SUPPLIERS" Type="Self.SPFS_SUPPLIERS" Multiplicity="1" />
-          <End Role="SPFS_STAGING_SUPPLIER_RATINGS" Type="Self.SPFS_STAGING_SUPPLIER_RATINGS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SPFS_SUPPLIERS">
-              <PropertyRef Name="CID" />
-            </Principal>
-            <Dependent Role="SPFS_STAGING_SUPPLIER_RATINGS">
-              <PropertyRef Name="CID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_USERS">
-          <End Role="SPFS_USERS" Type="Self.SPFS_USERS" Multiplicity="1" />
-          <End Role="SPFS_STAGING_SUPPLIER_RATINGS" Type="Self.SPFS_STAGING_SUPPLIER_RATINGS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SPFS_USERS">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="SPFS_STAGING_SUPPLIER_RATINGS">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SPFS_SUPPLIER_RATINGS_SPFS_SUPPLIERS">
-          <End Role="SPFS_SUPPLIERS" Type="Self.SPFS_SUPPLIERS" Multiplicity="1" />
-          <End Role="SPFS_SUPPLIER_RATINGS" Type="Self.SPFS_SUPPLIER_RATINGS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SPFS_SUPPLIERS">
-              <PropertyRef Name="CID" />
-            </Principal>
-            <Dependent Role="SPFS_SUPPLIER_RATINGS">
-              <PropertyRef Name="CID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SPFS_SUPPLIER_RATINGS_SPFS_USERS">
-          <End Role="SPFS_USERS" Type="Self.SPFS_USERS" Multiplicity="1" />
-          <End Role="SPFS_SUPPLIER_RATINGS" Type="Self.SPFS_SUPPLIER_RATINGS" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SPFS_USERS">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="SPFS_SUPPLIER_RATINGS">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SPFS_USERSITES_SPFS_USERS">
           <End Role="SPFS_USERS" Type="Self.SPFS_USERS" Multiplicity="1" />
           <End Role="SPFS_USERSITES" Type="Self.SPFS_USERSITES" Multiplicity="*" />
@@ -682,19 +540,12 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="SPFSContext" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="SPFS_LINK_ERP" EntityType="Self.SPFS_LINK_ERP" />
           <EntitySet Name="SPFS_ROLES" EntityType="Self.SPFS_ROLES" />
           <EntitySet Name="SPFS_SITES" EntityType="Self.SPFS_SITES" />
           <EntitySet Name="SPFS_SPEND_SUPPLIERS" EntityType="Self.SPFS_SPEND_SUPPLIERS" />
-          <EntitySet Name="SPFS_STAGING_SUPPLIER_RATINGS" EntityType="Self.SPFS_STAGING_SUPPLIER_RATINGS" />
-          <EntitySet Name="SPFS_SUPPLIER_RATINGS" EntityType="Self.SPFS_SUPPLIER_RATINGS" />
           <EntitySet Name="SPFS_SUPPLIERS" EntityType="Self.SPFS_SUPPLIERS" />
           <EntitySet Name="SPFS_USERS" EntityType="Self.SPFS_USERS" />
           <EntitySet Name="SPFS_USERSITES" EntityType="Self.SPFS_USERSITES" />
-          <AssociationSet Name="FK_SPFS_LINK_ERP_SPFS_SPEND_SUPPLIERS" Association="Self.FK_SPFS_LINK_ERP_SPFS_SPEND_SUPPLIERS">
-            <End Role="SPFS_SPEND_SUPPLIERS" EntitySet="SPFS_SPEND_SUPPLIERS" />
-            <End Role="SPFS_LINK_ERP" EntitySet="SPFS_LINK_ERP" />
-          </AssociationSet>
           <AssociationSet Name="FK_SPFS_USERS_SPFS_ROLES" Association="Self.FK_SPFS_USERS_SPFS_ROLES">
             <End Role="SPFS_ROLES" EntitySet="SPFS_ROLES" />
             <End Role="SPFS_USERS" EntitySet="SPFS_USERS" />
@@ -702,14 +553,6 @@
           <AssociationSet Name="FK_SPFS_SPEND_SUPPLIERS_SPFS_SITES" Association="Self.FK_SPFS_SPEND_SUPPLIERS_SPFS_SITES">
             <End Role="SPFS_SITES" EntitySet="SPFS_SITES" />
             <End Role="SPFS_SPEND_SUPPLIERS" EntitySet="SPFS_SPEND_SUPPLIERS" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_SITES" Association="Self.FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_SITES">
-            <End Role="SPFS_SITES" EntitySet="SPFS_SITES" />
-            <End Role="SPFS_STAGING_SUPPLIER_RATINGS" EntitySet="SPFS_STAGING_SUPPLIER_RATINGS" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SPFS_SUPPLIER_RATINGS_SPFS_SITES" Association="Self.FK_SPFS_SUPPLIER_RATINGS_SPFS_SITES">
-            <End Role="SPFS_SITES" EntitySet="SPFS_SITES" />
-            <End Role="SPFS_SUPPLIER_RATINGS" EntitySet="SPFS_SUPPLIER_RATINGS" />
           </AssociationSet>
           <AssociationSet Name="FK_SPFS_USERSITES_SPFS_SITES" Association="Self.FK_SPFS_USERSITES_SPFS_SITES">
             <End Role="SPFS_SITES" EntitySet="SPFS_SITES" />
@@ -719,41 +562,189 @@
             <End Role="SPFS_SUPPLIERS" EntitySet="SPFS_SUPPLIERS" />
             <End Role="SPFS_SPEND_SUPPLIERS" EntitySet="SPFS_SPEND_SUPPLIERS" />
           </AssociationSet>
-          <AssociationSet Name="FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_SUPPLIERS" Association="Self.FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_SUPPLIERS">
-            <End Role="SPFS_SUPPLIERS" EntitySet="SPFS_SUPPLIERS" />
-            <End Role="SPFS_STAGING_SUPPLIER_RATINGS" EntitySet="SPFS_STAGING_SUPPLIER_RATINGS" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_USERS" Association="Self.FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_USERS">
-            <End Role="SPFS_USERS" EntitySet="SPFS_USERS" />
-            <End Role="SPFS_STAGING_SUPPLIER_RATINGS" EntitySet="SPFS_STAGING_SUPPLIER_RATINGS" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SPFS_SUPPLIER_RATINGS_SPFS_SUPPLIERS" Association="Self.FK_SPFS_SUPPLIER_RATINGS_SPFS_SUPPLIERS">
-            <End Role="SPFS_SUPPLIERS" EntitySet="SPFS_SUPPLIERS" />
-            <End Role="SPFS_SUPPLIER_RATINGS" EntitySet="SPFS_SUPPLIER_RATINGS" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SPFS_SUPPLIER_RATINGS_SPFS_USERS" Association="Self.FK_SPFS_SUPPLIER_RATINGS_SPFS_USERS">
-            <End Role="SPFS_USERS" EntitySet="SPFS_USERS" />
-            <End Role="SPFS_SUPPLIER_RATINGS" EntitySet="SPFS_SUPPLIER_RATINGS" />
-          </AssociationSet>
           <AssociationSet Name="FK_SPFS_USERSITES_SPFS_USERS" Association="Self.FK_SPFS_USERSITES_SPFS_USERS">
             <End Role="SPFS_USERS" EntitySet="SPFS_USERS" />
             <End Role="SPFS_USERSITES" EntitySet="SPFS_USERSITES" />
           </AssociationSet>
+          <EntitySet Name="SPFS_LINK_ERP" EntityType="SPFS.SPFS_LINK_ERP" />
+          <AssociationSet Name="FK_SPFS_LINK_ERP_SPFS_SPEND_SUPPLIERS" Association="SPFS.FK_SPFS_LINK_ERP_SPFS_SPEND_SUPPLIERS">
+            <End Role="SPFS_SPEND_SUPPLIERS" EntitySet="SPFS_SPEND_SUPPLIERS" />
+            <End Role="SPFS_LINK_ERP" EntitySet="SPFS_LINK_ERP" />
+          </AssociationSet>
+          <EntitySet Name="SPFS_SUPPLIER_RATINGS" EntityType="SPFS.SPFS_SUPPLIER_RATINGS" />
+          <AssociationSet Name="FK_SPFS_SUPPLIER_RATINGS_SPFS_SITES" Association="SPFS.FK_SPFS_SUPPLIER_RATINGS_SPFS_SITES">
+            <End Role="SPFS_SITES" EntitySet="SPFS_SITES" />
+            <End Role="SPFS_SUPPLIER_RATINGS" EntitySet="SPFS_SUPPLIER_RATINGS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SPFS_SUPPLIER_RATINGS_SPFS_SUPPLIERS" Association="SPFS.FK_SPFS_SUPPLIER_RATINGS_SPFS_SUPPLIERS">
+            <End Role="SPFS_SUPPLIERS" EntitySet="SPFS_SUPPLIERS" />
+            <End Role="SPFS_SUPPLIER_RATINGS" EntitySet="SPFS_SUPPLIER_RATINGS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SPFS_SUPPLIER_RATINGS_SPFS_USERS" Association="SPFS.FK_SPFS_SUPPLIER_RATINGS_SPFS_USERS">
+            <End Role="SPFS_USERS" EntitySet="SPFS_USERS" />
+            <End Role="SPFS_SUPPLIER_RATINGS" EntitySet="SPFS_SUPPLIER_RATINGS" />
+          </AssociationSet>
+          <EntitySet Name="SPFS_STAGING_SUPPLIER_RATINGS" EntityType="SPFS.SPFS_STAGING_SUPPLIER_RATINGS" />
+          <AssociationSet Name="FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_SITES" Association="SPFS.FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_SITES">
+            <End Role="SPFS_SITES" EntitySet="SPFS_SITES" />
+            <End Role="SPFS_STAGING_SUPPLIER_RATINGS" EntitySet="SPFS_STAGING_SUPPLIER_RATINGS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_SUPPLIERS" Association="SPFS.FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_SUPPLIERS">
+            <End Role="SPFS_SUPPLIERS" EntitySet="SPFS_SUPPLIERS" />
+            <End Role="SPFS_STAGING_SUPPLIER_RATINGS" EntitySet="SPFS_STAGING_SUPPLIER_RATINGS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_USERS" Association="SPFS.FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_USERS">
+            <End Role="SPFS_USERS" EntitySet="SPFS_USERS" />
+            <End Role="SPFS_STAGING_SUPPLIER_RATINGS" EntitySet="SPFS_STAGING_SUPPLIER_RATINGS" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="SPFS_LINK_ERP">
+          <Key>
+            <PropertyRef Name="Spend_supplier_ID" />
+            <PropertyRef Name="Erp_supplier_ID" />
+          </Key>
+          <Property Name="Spend_supplier_ID" Type="Int32" Nullable="false" />
+          <Property Name="Erp_supplier_ID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SPFS_SPEND_SUPPLIERS" Relationship="SPFS.FK_SPFS_LINK_ERP_SPFS_SPEND_SUPPLIERS" FromRole="SPFS_LINK_ERP" ToRole="SPFS_SPEND_SUPPLIERS" />
+        </EntityType>
+        <Association Name="FK_SPFS_LINK_ERP_SPFS_SPEND_SUPPLIERS">
+          <End Type="SPFS.SPFS_SPEND_SUPPLIERS" Role="SPFS_SPEND_SUPPLIERS" Multiplicity="1" />
+          <End Type="SPFS.SPFS_LINK_ERP" Role="SPFS_LINK_ERP" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SPFS_SPEND_SUPPLIERS">
+              <PropertyRef Name="Spend_supplier_ID" />
+            </Principal>
+            <Dependent Role="SPFS_LINK_ERP">
+              <PropertyRef Name="Spend_supplier_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SPFS_SUPPLIER_RATINGS">
+          <Key>
+            <PropertyRef Name="RatingsID" />
+          </Key>
+          <Property Name="RatingsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Rating_period" Type="Int32" Nullable="false" />
+          <Property Name="SiteID" Type="Int32" Nullable="false" />
+          <Property Name="CID" Type="Int32" Nullable="false" />
+          <Property Name="Inbound_parts" Type="Int32" Nullable="false" />
+          <Property Name="OTR" Type="Int32" Nullable="false" />
+          <Property Name="OTD" Type="Int32" Nullable="false" />
+          <Property Name="PFR" Type="Int32" Nullable="false" />
+          <Property Name="Initial_submission_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Temp_Upload_" Type="Boolean" />
+          <Property Name="Interface_flag" Type="Boolean" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="Created_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Created_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Modified_date" Type="DateTime" Precision="0" />
+          <Property Name="Modified_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SPFS_SITES" Relationship="SPFS.FK_SPFS_SUPPLIER_RATINGS_SPFS_SITES" FromRole="SPFS_SUPPLIER_RATINGS" ToRole="SPFS_SITES" />
+          <NavigationProperty Name="SPFS_SUPPLIERS" Relationship="SPFS.FK_SPFS_SUPPLIER_RATINGS_SPFS_SUPPLIERS" FromRole="SPFS_SUPPLIER_RATINGS" ToRole="SPFS_SUPPLIERS" />
+          <NavigationProperty Name="SPFS_USERS" Relationship="SPFS.FK_SPFS_SUPPLIER_RATINGS_SPFS_USERS" FromRole="SPFS_SUPPLIER_RATINGS" ToRole="SPFS_USERS" />
+        </EntityType>
+        <Association Name="FK_SPFS_SUPPLIER_RATINGS_SPFS_SITES">
+          <End Type="SPFS.SPFS_SITES" Role="SPFS_SITES" Multiplicity="1" />
+          <End Type="SPFS.SPFS_SUPPLIER_RATINGS" Role="SPFS_SUPPLIER_RATINGS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SPFS_SITES">
+              <PropertyRef Name="SiteID" />
+            </Principal>
+            <Dependent Role="SPFS_SUPPLIER_RATINGS">
+              <PropertyRef Name="SiteID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SPFS_SUPPLIER_RATINGS_SPFS_SUPPLIERS">
+          <End Type="SPFS.SPFS_SUPPLIERS" Role="SPFS_SUPPLIERS" Multiplicity="1" />
+          <End Type="SPFS.SPFS_SUPPLIER_RATINGS" Role="SPFS_SUPPLIER_RATINGS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SPFS_SUPPLIERS">
+              <PropertyRef Name="CID" />
+            </Principal>
+            <Dependent Role="SPFS_SUPPLIER_RATINGS">
+              <PropertyRef Name="CID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SPFS_SUPPLIER_RATINGS_SPFS_USERS">
+          <End Type="SPFS.SPFS_USERS" Role="SPFS_USERS" Multiplicity="1" />
+          <End Type="SPFS.SPFS_SUPPLIER_RATINGS" Role="SPFS_SUPPLIER_RATINGS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SPFS_USERS">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="SPFS_SUPPLIER_RATINGS">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SPFS_STAGING_SUPPLIER_RATINGS">
+          <Key>
+            <PropertyRef Name="StagingID" />
+          </Key>
+          <Property Name="StagingID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Rating_period" Type="Int32" Nullable="false" />
+          <Property Name="SiteID" Type="Int32" Nullable="false" />
+          <Property Name="CID" Type="Int32" Nullable="false" />
+          <Property Name="Inbound_parts" Type="Int32" Nullable="false" />
+          <Property Name="OTR" Type="Int32" Nullable="false" />
+          <Property Name="OTD" Type="Int32" Nullable="false" />
+          <Property Name="PFR" Type="Int32" Nullable="false" />
+          <Property Name="Initial_submission_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Temp_Upload_" Type="Boolean" />
+          <Property Name="Interface_flag" Type="Boolean" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="Created_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Created_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Modified_date" Type="DateTime" Precision="0" />
+          <Property Name="Modified_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SPFS_SITES" Relationship="SPFS.FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_SITES" FromRole="SPFS_STAGING_SUPPLIER_RATINGS" ToRole="SPFS_SITES" />
+          <NavigationProperty Name="SPFS_SUPPLIERS" Relationship="SPFS.FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_SUPPLIERS" FromRole="SPFS_STAGING_SUPPLIER_RATINGS" ToRole="SPFS_SUPPLIERS" />
+          <NavigationProperty Name="SPFS_USERS" Relationship="SPFS.FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_USERS" FromRole="SPFS_STAGING_SUPPLIER_RATINGS" ToRole="SPFS_USERS" />
+        </EntityType>
+        <Association Name="FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_SITES">
+          <End Type="SPFS.SPFS_SITES" Role="SPFS_SITES" Multiplicity="1" />
+          <End Type="SPFS.SPFS_STAGING_SUPPLIER_RATINGS" Role="SPFS_STAGING_SUPPLIER_RATINGS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SPFS_SITES">
+              <PropertyRef Name="SiteID" />
+            </Principal>
+            <Dependent Role="SPFS_STAGING_SUPPLIER_RATINGS">
+              <PropertyRef Name="SiteID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_SUPPLIERS">
+          <End Type="SPFS.SPFS_SUPPLIERS" Role="SPFS_SUPPLIERS" Multiplicity="1" />
+          <End Type="SPFS.SPFS_STAGING_SUPPLIER_RATINGS" Role="SPFS_STAGING_SUPPLIER_RATINGS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SPFS_SUPPLIERS">
+              <PropertyRef Name="CID" />
+            </Principal>
+            <Dependent Role="SPFS_STAGING_SUPPLIER_RATINGS">
+              <PropertyRef Name="CID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SPFS_STAGING_SUPPLIER_RATINGS_SPFS_USERS">
+          <End Type="SPFS.SPFS_USERS" Role="SPFS_USERS" Multiplicity="1" />
+          <End Type="SPFS.SPFS_STAGING_SUPPLIER_RATINGS" Role="SPFS_STAGING_SUPPLIER_RATINGS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SPFS_USERS">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="SPFS_STAGING_SUPPLIER_RATINGS">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="SPFSStoreContainer" CdmEntityContainer="SPFSContext">
-          <EntitySetMapping Name="SPFS_LINK_ERP">
-            <EntityTypeMapping TypeName="SPFS.SPFS_LINK_ERP">
-              <MappingFragment StoreEntitySet="SPFS_LINK_ERP">
-                <ScalarProperty Name="Spend_supplier_ID" ColumnName="Spend_supplier_ID" />
-                <ScalarProperty Name="Erp_supplier_ID" ColumnName="Erp_supplier_ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="SPFS_ROLES">
             <EntityTypeMapping TypeName="SPFS.SPFS_ROLES">
               <MappingFragment StoreEntitySet="SPFS_ROLES">
@@ -800,50 +791,6 @@
                 <ScalarProperty Name="Total_Spend" ColumnName="Total_Spend" />
                 <ScalarProperty Name="Reject_incident_count" ColumnName="Reject_incident_count" />
                 <ScalarProperty Name="Reject_parts_count" ColumnName="Reject_parts_count" />
-                <ScalarProperty Name="Created_date" ColumnName="Created_date" />
-                <ScalarProperty Name="Created_by" ColumnName="Created_by" />
-                <ScalarProperty Name="Modified_date" ColumnName="Modified_date" />
-                <ScalarProperty Name="Modified_by" ColumnName="Modified_by" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="SPFS_STAGING_SUPPLIER_RATINGS">
-            <EntityTypeMapping TypeName="SPFS.SPFS_STAGING_SUPPLIER_RATINGS">
-              <MappingFragment StoreEntitySet="SPFS_STAGING_SUPPLIER_RATINGS">
-                <ScalarProperty Name="StagingID" ColumnName="StagingID" />
-                <ScalarProperty Name="Rating_period" ColumnName="Rating_period" />
-                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
-                <ScalarProperty Name="CID" ColumnName="CID" />
-                <ScalarProperty Name="Inbound_parts" ColumnName="Inbound_parts" />
-                <ScalarProperty Name="OTR" ColumnName="OTR" />
-                <ScalarProperty Name="OTD" ColumnName="OTD" />
-                <ScalarProperty Name="PFR" ColumnName="PFR" />
-                <ScalarProperty Name="Initial_submission_date" ColumnName="Initial_submission_date" />
-                <ScalarProperty Name="Temp_Upload_" ColumnName="Temp_Upload?" />
-                <ScalarProperty Name="Interface_flag" ColumnName="Interface_flag" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="Created_date" ColumnName="Created_date" />
-                <ScalarProperty Name="Created_by" ColumnName="Created_by" />
-                <ScalarProperty Name="Modified_date" ColumnName="Modified_date" />
-                <ScalarProperty Name="Modified_by" ColumnName="Modified_by" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="SPFS_SUPPLIER_RATINGS">
-            <EntityTypeMapping TypeName="SPFS.SPFS_SUPPLIER_RATINGS">
-              <MappingFragment StoreEntitySet="SPFS_SUPPLIER_RATINGS">
-                <ScalarProperty Name="RatingsID" ColumnName="RatingsID" />
-                <ScalarProperty Name="Rating_period" ColumnName="Rating_period" />
-                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
-                <ScalarProperty Name="CID" ColumnName="CID" />
-                <ScalarProperty Name="Inbound_parts" ColumnName="Inbound_parts" />
-                <ScalarProperty Name="OTR" ColumnName="OTR" />
-                <ScalarProperty Name="OTD" ColumnName="OTD" />
-                <ScalarProperty Name="PFR" ColumnName="PFR" />
-                <ScalarProperty Name="Initial_submission_date" ColumnName="Initial_submission_date" />
-                <ScalarProperty Name="Temp_Upload_" ColumnName="Temp_Upload?" />
-                <ScalarProperty Name="Interface_flag" ColumnName="Interface_flag" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="Created_date" ColumnName="Created_date" />
                 <ScalarProperty Name="Created_by" ColumnName="Created_by" />
                 <ScalarProperty Name="Modified_date" ColumnName="Modified_date" />
@@ -901,6 +848,58 @@
                 <ScalarProperty Name="Created_by" ColumnName="Created_by" />
                 <ScalarProperty Name="Modified_date" ColumnName="Modified_date" />
                 <ScalarProperty Name="Modified_by" ColumnName="Modified_by" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SPFS_LINK_ERP">
+            <EntityTypeMapping TypeName="SPFS.SPFS_LINK_ERP">
+              <MappingFragment StoreEntitySet="SPFS_LINK_ERP">
+                <ScalarProperty Name="Erp_supplier_ID" ColumnName="Erp_supplier_ID" />
+                <ScalarProperty Name="Spend_supplier_ID" ColumnName="Spend_supplier_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SPFS_SUPPLIER_RATINGS">
+            <EntityTypeMapping TypeName="SPFS.SPFS_SUPPLIER_RATINGS">
+              <MappingFragment StoreEntitySet="SPFS_SUPPLIER_RATINGS">
+                <ScalarProperty Name="Modified_by" ColumnName="Modified_by" />
+                <ScalarProperty Name="Modified_date" ColumnName="Modified_date" />
+                <ScalarProperty Name="Created_by" ColumnName="Created_by" />
+                <ScalarProperty Name="Created_date" ColumnName="Created_date" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Interface_flag" ColumnName="Interface_flag" />
+                <ScalarProperty Name="Temp_Upload_" ColumnName="Temp_Upload?" />
+                <ScalarProperty Name="Initial_submission_date" ColumnName="Initial_submission_date" />
+                <ScalarProperty Name="PFR" ColumnName="PFR" />
+                <ScalarProperty Name="OTD" ColumnName="OTD" />
+                <ScalarProperty Name="OTR" ColumnName="OTR" />
+                <ScalarProperty Name="Inbound_parts" ColumnName="Inbound_parts" />
+                <ScalarProperty Name="CID" ColumnName="CID" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="Rating_period" ColumnName="Rating_period" />
+                <ScalarProperty Name="RatingsID" ColumnName="RatingsID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SPFS_STAGING_SUPPLIER_RATINGS">
+            <EntityTypeMapping TypeName="SPFS.SPFS_STAGING_SUPPLIER_RATINGS">
+              <MappingFragment StoreEntitySet="SPFS_STAGING_SUPPLIER_RATINGS">
+                <ScalarProperty Name="Modified_by" ColumnName="Modified_by" />
+                <ScalarProperty Name="Modified_date" ColumnName="Modified_date" />
+                <ScalarProperty Name="Created_by" ColumnName="Created_by" />
+                <ScalarProperty Name="Created_date" ColumnName="Created_date" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Interface_flag" ColumnName="Interface_flag" />
+                <ScalarProperty Name="Temp_Upload_" ColumnName="Temp_Upload?" />
+                <ScalarProperty Name="Initial_submission_date" ColumnName="Initial_submission_date" />
+                <ScalarProperty Name="PFR" ColumnName="PFR" />
+                <ScalarProperty Name="OTD" ColumnName="OTD" />
+                <ScalarProperty Name="OTR" ColumnName="OTR" />
+                <ScalarProperty Name="Inbound_parts" ColumnName="Inbound_parts" />
+                <ScalarProperty Name="CID" ColumnName="CID" />
+                <ScalarProperty Name="SiteID" ColumnName="SiteID" />
+                <ScalarProperty Name="Rating_period" ColumnName="Rating_period" />
+                <ScalarProperty Name="StagingID" ColumnName="StagingID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

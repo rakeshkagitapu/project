@@ -1,4 +1,5 @@
-﻿@model SPFS.Models.RatingsViewModel
+﻿
+@model SPFS.Models.RatingsViewModel
 @{
     ViewBag.Title = "Ratings";
     var count = Model.RatingRecords != null ? Model.RatingRecords.Count : 0;
@@ -80,13 +81,13 @@
                     @if (Model.IsPreviousStagingRatings)
                     {
 
-                        <a href="@Url.Action("LoadAlertData", "Ratings", new { SiteID =Model.SiteID,Year=Model.Year,Month=Model.Month, isStaging = true ,isLastmonth=true})" class="btn btn-success btn-md">Yes - Load last months data </a>
-                        <a href="@Url.Action("LoadAlertData", "Ratings", new { SiteID =Model.SiteID,Year=Model.Year,Month=Model.Month, isStaging = false, isLastmonth = false})" class="btn btn-danger btn-md">No - Continue with current ratings</a>
+                    <a href="@Url.Action("LoadAlertData", "Ratings", new { SiteID =Model.SiteID,Year=Model.Year,Month=Model.Month, isStaging = true ,isLastmonth=true})" class="btn btn-success btn-md">Yes - Load last months data </a>
+                    <a href="@Url.Action("LoadAlertData", "Ratings", new { SiteID =Model.SiteID,Year=Model.Year,Month=Model.Month, isStaging = false, isLastmonth = false})" class="btn btn-danger btn-md">No - Continue with current ratings</a>
                     }
                     @if (Model.IsCurrentRatings)
                     {
-                        <a href="@Url.Action("LoadAlertData", "Ratings", new { SiteID =Model.SiteID,Year=Model.Year,Month=Model.Month, isStaging = false,isLastmonth=false})" class="btn btn-success btn-smd">Yes - Overwrite existing data </a>
-                        <a href="@Url.Action("Index", "Ratings")" class="btn btn-danger btn-md">No - Clear Search criteria</a>
+                    <a href="@Url.Action("LoadAlertData", "Ratings", new { SiteID =Model.SiteID,Year=Model.Year,Month=Model.Month, isStaging = false,isLastmonth=false})" class="btn btn-success btn-smd">Yes - Overwrite existing data </a>
+                    <a href="@Url.Action("Index", "Ratings")" class="btn btn-danger btn-md">No - Clear Search criteria</a>
                     }
 
                 </div>
@@ -121,26 +122,29 @@
                     <a href="@Url.Action("Index", "Home")" class="btn btn-danger" onclick="return confirm('Are you sure, all data will be lost')">
                         <span class="glyphicon glyphicon-remove"></span> Cancel
                     </a>
-                    <input type="button" value="Clear" onclick="javascript:window.location=('@Url.Action("Index","Ratings")')" class="btn btn-default" />
+                    <input type="button" value="Clear" onclick="javascript:window.location=('@Url.Action("Index","Ratings")')" class="btn btn-warning" />
                     @*<a href="@Url.Action("Index", "Ratings")" class="btn btn-warning" onclick="return confirm('Are you sure, all data will be lost')">
                             <span class="glyphicon glyphicon-remove-sign"></span> Clear
                         </a>*@
-                    @*<button type="submit" value="Save" onclick="OnBeginPostBack_Save(this)" name="action:SaveData" class="btn btn-primary">
-                            <span class="glyphicon glyphicon-floppy-save"></span> Save
-
-                        </button>*@
-                    <button type="submit" id="btnSave" class="btn btn-primary">
+                 
+                    <button type="button" id="btnSave" class="btn btn-primary">
                         <span class="glyphicon glyphicon-floppy-save"></span> Save
 
                     </button>
-                    @*<button type="submit" value="Submit" onclick="OnBeginPostBack_Submit(this)" name="action:SubmitData" class="btn btn-primary">
-                            <span class="glyphicon glyphicon-send"></span> Submit Ratings
+                  @if(!Model.ShowSubmit)
+                    {
+                    <button type="button" id="btnSubmit" class="btn btn-primary disabled">
+                        <span class="glyphicon glyphicon-send"></span> Submit Ratings
 
-                        </button>*@
+                    </button>
+                    }
+                    else
+                    {
                     <button type="button" id="btnSubmit" class="btn btn-primary">
                         <span class="glyphicon glyphicon-send"></span> Submit Ratings
 
                     </button>
+                    }
                 </div>
 
             </div>
@@ -193,7 +197,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $('#btnSave').click(function () {
-            debugger
+            
             var Records = [];
             var CID, Inbound, OTR, OTD, PFR;
             var len = ($('#container tr').length)/2;
@@ -232,43 +236,35 @@
             var siteID = @Html.Raw(Json.Encode(Model.SiteID));
             var month =@Html.Raw(Json.Encode(Model.Month));
             var year = @Html.Raw(Json.Encode(Model.Year));
-
-            @*var CIDarray =[];
-            var RateSuppliers = @Html.Raw(Json.Encode(ViewBag.RatingSuppliers));
-
-            for( i = 0; i < RateSuppliers.length; i++)
-            {
-                CIDarray.push(RateSuppliers[i].Value);
-            }*@
-
+            
             if (Records.length > 0) {
-                $("#dlgmodal").dialog('open');
-                $('#dlgmodal span').text('Saving Records...');
-                $.ajax({
-                    url: '@Url.Action("SaveRatings", "Ratings")',
-                    data:  JSON.stringify({ 'SavedRecords': Records,SiteID: siteID, Month: month, Year:year}), //,CIDArray:CIDarray}),
-                    traditional: true,
-                    contentType: "application/json; charset=utf-8",
-                    type: 'POST',
-                    cache: false,
-                    async: false,
-                    success: function (data) {
+                if (confirm('Are you sure you want to save, all records that have no inbound quantity will be ommited?')) {
+                    $("#dlgmodal").dialog('open');
+                    $('#dlgmodal span').text('Saving Records...');
+                    $.ajax({
+                        url: '@Url.Action("SaveRatings", "Ratings")',
+                        data:  JSON.stringify({ 'SavedRecords': Records,SiteID: siteID, Month: month, Year:year}), //,CIDArray:CIDarray}),
+                        traditional: true,
+                        contentType: "application/json; charset=utf-8",
+                        type: 'POST',
+                        cache: false,
+                        async: false,
+                        success: function (data) {
 
 
-                    },
-                    complete: function (jqXHR, textStatus, errorThrown) {
-                        $("#dlgmodal").closest('.ui-dialog-content').dialog("close");
+                        },
+                        complete: function (jqXHR, textStatus, errorThrown) {
+                            $("#dlgmodal").closest('.ui-dialog-content').dialog("close");
+                            window.location.href = "@Html.Raw(@Url.Action("SavedResults", "Ratings", new { @SiteID= @Html.Raw(Json.Encode(Model.SiteID)), @Year = @Html.Raw(Json.Encode(Model.Year)), @Month= @Html.Raw(Json.Encode(Model.Month))}))";
+                        },
+                        error:function(e)
+                        {
+                            alert("Error ! Saving records "+ e);
+                        }
 
-                        @*var url = '@Url.Action("SavedResults", "Ratings")';
-                        url = url + '?SiteID=' + siteId + '&Year = ' + year + '&Month = '+ month;*@
-                        debugger;
-                        @*window.location = @Html.Raw(url);*@
-
-                        window.location.href = "@Html.Raw(@Url.Action("SavedResults", "Ratings", new { @SiteID= @Html.Raw(Json.Encode(Model.SiteID)), @Year = @Html.Raw(Json.Encode(Model.Year)), @Month= @Html.Raw(Json.Encode(Model.Month))}))";
-                    }
-
-                });
-
+                    });
+                               
+                }
             }
             else {
                 alert('No rows to save');
@@ -289,11 +285,6 @@
                 OTD = $('#RatingRecords_' + i + '__OTD').val();
                 PFR = $('#RatingRecords_' + i + '__PFR').val();
 
-                //Inbound = parseInt($('#container tr')[i].cells['4'].innerText, 10);
-                //OTR = parseInt($('#container tr')[i].cells['7'].innerText, 10);
-                //OTD = parseInt($('#container tr')[i].cells['8'].innerText, 10);
-                //PFR = parseInt($('#container tr')[i].cells['10'].innerText, 10);
-
                 if (isFinite(Inbound)) {
 
                 } else {
@@ -317,14 +308,12 @@
                     Records.push({ CID: CID, Inbound_parts: Inbound, OTR: OTR, OTD: OTD, PFR: PFR })
                 }
             }
-            //$('tr').add('#container tr:nth-child(n-1)').each(function () {
-
-            //});
+           
             var siteID = @Html.Raw(Json.Encode(Model.SiteID));
             var month =@Html.Raw(Json.Encode(Model.Month));
             var year = @Html.Raw(Json.Encode(Model.Year));
             debugger
-            if (Records.length > 0 && confirm('Are you sure you want to Submit these Records?')) {
+            if (Records.length > 0) {
                 $("#dlgmodal").dialog('open');
                 $('#dlgmodal span').text('Submitting Records...');
                 $.ajax({

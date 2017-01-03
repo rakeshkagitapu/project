@@ -9,9 +9,10 @@
     <title>@ViewBag.Title - SPFS V2</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/bootstrap")
+    @*@Scripts.Render("~/bundles/bootstrap")*@
     @*@Scripts.Render("~/bundles/tooltip")*@
     @* @Scripts.Render("~/bundles/jqueryui")*@
     @*@Scripts.Render("~/bundles/bootstrapSPFS")
@@ -119,14 +120,14 @@
         </div>
     </div>
     @Html.Partial("_SpfsFooter")
-
-    <div id="dlgmodal" class="alert-warning" style="overflow: hidden;">
-        <div class="leftimage">
-            <img src="@Url.Content("~/Images/ajax-loader.gif")" alt="Image" />
-            <span style="color: #1398d0">Loading...</span>
+    <div id="Fxmodal">
+        <div id="dlgmodal" class="alert-warning" style="overflow: hidden;">
+            <div class="leftimage">
+                <img src="@Url.Content("~/Images/ajax-loader.gif")" alt="Image" />
+                <span style="color: #1398d0">Loading...</span>
+            </div>
         </div>
     </div>
-
     <div id="dlgsave" class="panel panel-default text-center" style="background-color: rgba(229, 245, 250, 0.701961); color: rgb(4, 135, 196); margin: 0; border-color: rgb(183, 225, 240);">
         <div class="panel-body">
             <h4>
@@ -179,7 +180,7 @@
     </div>
 
     @*<div id="ajaxLoaderDiv" style="position:fixed; top:40%; left:45%; z-index:1234; display:none;"></div>*@
-        @*@Scripts.Render("~/bundles/bootstrap")*@
+        @Scripts.Render("~/bundles/bootstrap")
 
         <script type="text/javascript">
             @*function showPageLoadingSpinner() {
@@ -237,6 +238,7 @@
 
 
             function OnBeginPostBack_Save(sender) {
+               
                 var form = $(sender).parents('form');
 
                 if (form.valid()) {

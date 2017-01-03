@@ -14,6 +14,7 @@ namespace SPFS.Model
     
     public partial class SPFS_ROLES
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SPFS_ROLES()
         {
             this.SPFS_USERS = new HashSet<SPFS_USERS>();
@@ -26,6 +27,7 @@ namespace SPFS.Model
         public Nullable<System.DateTime> Modified_date { get; set; }
         public string Modified_by { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SPFS_USERS> SPFS_USERS { get; set; }
     }
 }
