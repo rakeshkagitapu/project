@@ -460,7 +460,12 @@ table .header-fixed {
     display: none;
 }
 
-
+/*#endregion oldresults*/
+.errorBorderClass
+{
+background: #FEF1EC;
+    border: 1px solid #CD0A0A;
+}
 /*#region oldresults*/
 .oldfixed_headers tr:nth-of-type(n) td {
     border-bottom: 1px solid #1398d0;
@@ -594,9 +599,3 @@ table .header-fixed {
         height: 520px;
     }
 
-/*#endregion oldresults*/
-.errorBorderClass
-{
-background: #FEF1EC;
-    border: 1px solid #CD0A0A;
-}
